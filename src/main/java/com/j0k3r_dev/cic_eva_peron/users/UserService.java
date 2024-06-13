@@ -6,6 +6,7 @@ import com.j0k3r_dev.cic_eva_peron.security.roles.RoleEntity;
 import com.j0k3r_dev.cic_eva_peron.security.roles.RoleRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,6 +19,9 @@ public class UserService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Transactional
     public UserResponse registryUser(UserRequest userRequest){
@@ -33,6 +37,7 @@ public class UserService {
         }else {
             user.setRole(role.get());
         }
+        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         userRepository.save(user);
         return UserMapper.INSTANCE.userEntityToUserResponse(user);
     }

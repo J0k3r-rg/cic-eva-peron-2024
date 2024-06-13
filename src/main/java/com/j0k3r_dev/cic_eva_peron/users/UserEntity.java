@@ -24,11 +24,16 @@ public class UserEntity implements UserDetails {
 
     @Id
     @UuidGenerator
+    @Column(length = 40)
     private String id;
 
+    @Column(unique = true, length = 45)
     private String username;
 
+    @Column(length = 200)
     private String password;
+
+    private String email;
 
     private Boolean enable = false;
 
