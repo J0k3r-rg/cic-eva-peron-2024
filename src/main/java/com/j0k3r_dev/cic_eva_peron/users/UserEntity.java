@@ -1,15 +1,17 @@
 package com.j0k3r_dev.cic_eva_peron.users;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.j0k3r_dev.cic_eva_peron.security.permissions.PermissionEntity;
+import com.j0k3r_dev.cic_eva_peron.security.roles.RoleEntity;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -30,9 +32,27 @@ public class UserEntity implements UserDetails {
 
     private Boolean enable = false;
 
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private RoleEntity role;
+
+    @ManyToMany
+    @JoinTable(
+            name = "users_permissions",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
+    private List<PermissionEntity> permissions;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("Role_"+this.role.getName()));
+        this.permissions.forEach(
+                permission ->
+                        authorities.add(new SimpleGrantedAuthority("Permission_"+permission.getName()))
+        );
+        return authorities;
     }
 
     @Override
