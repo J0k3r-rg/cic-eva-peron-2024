@@ -2,6 +2,8 @@ package com.j0k3r_dev.cic_eva_peron.controllers;
 
 import com.j0k3r_dev.cic_eva_peron.controllers.validationsLogin.ValidationsLogin;
 import com.j0k3r_dev.cic_eva_peron.http.request.UserLoginRequest;
+import com.j0k3r_dev.cic_eva_peron.http.response.LoginResponse;
+import com.j0k3r_dev.cic_eva_peron.security.JwtService;
 import com.j0k3r_dev.cic_eva_peron.users.UserEntity;
 import com.j0k3r_dev.cic_eva_peron.users.UserException;
 import com.j0k3r_dev.cic_eva_peron.users.UserRepository;
@@ -11,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,6 +38,9 @@ public class LoginController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private JwtService jwtService;
+
     @PostMapping
     public ResponseEntity<?> login(@RequestBody @Valid UserLoginRequest userRequest) throws UserException {
         Optional<UserEntity> optionalUser = userRepository.findByUsername(userRequest.getUsername());
@@ -48,8 +52,18 @@ public class LoginController {
                         userRequest.getUsername(),
                         userRequest.getPassword());
         this.authenticationManager.authenticate(authenticationRequest).getCredentials();
-        UserDetails user = userDetailsService.loadUserByUsername(userRequest.getUsername());
-        return ResponseEntity.ok("success");
+        UserEntity user = (UserEntity) userDetailsService.loadUserByUsername(userRequest.getUsername());
+        String token = jwtService.generateToken(user.getUsername());
+        List<String> authorities = user.getAuthorities().stream().map(
+                role -> role.getAuthority()
+        ).toList();
+        return ResponseEntity.ok(
+                LoginResponse.builder()
+                        .authorities(authorities)
+                        .id(user.getId())
+                        .email(user.getEmail())
+                        .token(token)
+                        .build()
+        );
     }
-
 }

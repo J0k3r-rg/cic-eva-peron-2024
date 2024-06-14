@@ -19,4 +19,7 @@ public class UserRequest {
     @NotBlank
     private String email;
 
+    @NotBlank
+    private String dni;
+
 }

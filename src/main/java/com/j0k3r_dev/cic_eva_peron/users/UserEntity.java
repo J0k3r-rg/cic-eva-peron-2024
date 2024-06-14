@@ -4,6 +4,7 @@ import com.j0k3r_dev.cic_eva_peron.security.permissions.PermissionEntity;
 import com.j0k3r_dev.cic_eva_peron.security.roles.RoleEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
@@ -18,6 +19,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "users")
 public class UserEntity implements UserDetails {
@@ -33,27 +35,26 @@ public class UserEntity implements UserDetails {
     @Column(length = 200)
     private String password;
 
+    @Column(unique = true)
     private String email;
+
+    @Column(unique = true)
+    private String dni;
+
+    @Column(unique = true)
+    private String urlImage;
 
     private Boolean enable = false;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private RoleEntity role;
-
-    @ManyToMany
-    @JoinTable(
-            name = "users_permissions",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "permission_id")
-    )
-    private List<PermissionEntity> permissions;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("Role_"+this.role.getName()));
-        this.permissions.forEach(
+        authorities.add(new SimpleGrantedAuthority("ROLE_"+this.role.getName()));
+        this.role.getPermissions().forEach(
                 permission ->
                         authorities.add(new SimpleGrantedAuthority("Permission_"+permission.getName()))
         );

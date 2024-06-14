@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-public class IsUserEmpty implements ValidationsLogin{
+public class ExistsUserInDB implements ValidationsLogin{
 
     @Override
     public void validate(Optional<UserEntity> optional) throws UserException {
