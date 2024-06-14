@@ -1,6 +1,7 @@
-package com.j0k3r_dev.cic_eva_peron.security;
+package com.j0k3r_dev.cic_eva_peron.security.filters;
 
 import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.j0k3r_dev.cic_eva_peron.security.JwtService;
 import com.j0k3r_dev.cic_eva_peron.users.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -28,6 +29,7 @@ public class JwtFilter extends OncePerRequestFilter{
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, JWTDecodeException {
 
         if(getAuthorization(request) != null && getAuthorization(request).startsWith("Bearer ")){
+            System.out.println("Ejecutando filtro antes de todas las validaciones de spting security");
             String token = getTokenAuthorization(getAuthorization(request));
             String subject = null;
             try{

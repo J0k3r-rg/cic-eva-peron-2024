@@ -1,5 +1,7 @@
 package com.j0k3r_dev.cic_eva_peron.security;
 
+import com.j0k3r_dev.cic_eva_peron.security.filters.JwtFilter;
+import com.j0k3r_dev.cic_eva_peron.security.filters.RegistryFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import javax.annotation.processing.Filer;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -23,6 +27,9 @@ public class SecurityConfigs {
 
     @Autowired
     private JwtFilter jwtFilter;
+
+    @Autowired
+    private RegistryFilter registryFilter;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -43,6 +50,7 @@ public class SecurityConfigs {
                                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(registryFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(AbstractHttpConfigurer::disable);
         return http.build();
     }
