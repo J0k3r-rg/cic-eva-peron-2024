@@ -1,6 +1,8 @@
 package com.j0k3r_dev.cic_eva_peron.controllers;
 
 import com.j0k3r_dev.cic_eva_peron.http.request.RoleRequest;
+import com.j0k3r_dev.cic_eva_peron.security.permissions.PermissionException;
+import com.j0k3r_dev.cic_eva_peron.security.roles.RoleException;
 import com.j0k3r_dev.cic_eva_peron.security.roles.RoleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +17,26 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
+    @PreAuthorize("hasAuthority('Permission_GET_ROLE')")
+    @GetMapping("/getAll")
+    public ResponseEntity<?> getAllRoles(){
+        return ResponseEntity.ok(roleService.getAllRoles());
+    }
+
     @PreAuthorize("hasAuthority('Permission_CREATE_ROLE')")
     @PostMapping("/create")
-    public ResponseEntity<?> createRole(@RequestBody @Valid RoleRequest role){
+    public ResponseEntity<?> createRole(@RequestBody @Valid RoleRequest role) throws PermissionException, RoleException {
         return ResponseEntity.ok(
                 roleService.createRole(role)
         );
     }
 
-    @PreAuthorize("hasAuthority('Permission_GET_ROLE')")
-    @GetMapping("/getAll")
-    public ResponseEntity<?> getAllRoles(){
-        return ResponseEntity.ok(roleService.getAllRoles());
+    @PreAuthorize("hasAuthority('Permission_UPDATE_ROLE')")
+    @PutMapping("/update")
+    public ResponseEntity<?> updateRole(@RequestBody @Valid RoleRequest role) throws PermissionException, RoleException {
+        return ResponseEntity.ok(
+                roleService.updateRole(role)
+        );
     }
 
 }

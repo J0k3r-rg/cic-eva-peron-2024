@@ -21,7 +21,7 @@ public class PermissionController {
     @Autowired
     private JwtService jwtService;
 
-    @PreAuthorize("hasAuthority('CREATE_PERMISSION')")
+    @PreAuthorize("hasAuthority('Permission_CREATE_PERMISSION')")
     @PostMapping("/save/{name}")
     public ResponseEntity<?> createPermission(@PathVariable @NotBlank String name, HttpServletRequest request) throws PermissionException {
         String token = jwtService.getTokenAuthorization(jwtService.getAuthorization(request));

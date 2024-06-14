@@ -53,33 +53,19 @@ public class CicEvaPeronApplication {
 							.permissions(permissionUser)
 							.build()
 			);
-			permissionRepository.save(
-					PermissionEntity.builder()
-							.name("CREATE_PERMISSION")
-							.enable(true)
-							.build()
+
+			Stream.of(
+					"GET_ROLE","CREATE_ROLE",
+					"CREATE_PERMISSION","GET_PERMISSION"
+			).forEach(
+					authority ->
+							permissionRepository.save(
+									PermissionEntity.builder()
+											.name(authority)
+											.build()
+							)
 			);
 
-			permissionRepository.save(
-					PermissionEntity.builder()
-							.name("GET_PERMISSION")
-							.enable(true)
-							.build()
-			);
-
-			permissionRepository.save(
-					PermissionEntity.builder()
-							.name("CREATE_ROLE")
-							.enable(true)
-							.build()
-			);
-
-			permissionRepository.save(
-					PermissionEntity.builder()
-							.name("GET_ROLE")
-							.enable(true)
-							.build()
-			);
 
 			RoleEntity role = roleRepository.save(
 					RoleEntity.builder()

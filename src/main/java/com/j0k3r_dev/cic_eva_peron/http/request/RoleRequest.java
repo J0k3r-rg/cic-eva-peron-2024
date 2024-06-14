@@ -10,6 +10,8 @@ import java.util.List;
 @Data
 public class RoleRequest {
 
+    private String id;
+
     @NotBlank
     private String name;
 
