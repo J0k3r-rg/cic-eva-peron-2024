@@ -2,7 +2,6 @@ package com.j0k3r_dev.cic_eva_peron.users;
 
 import com.j0k3r_dev.cic_eva_peron.http.request.UserRequest;
 import com.j0k3r_dev.cic_eva_peron.http.response.UserResponse;
-import com.j0k3r_dev.cic_eva_peron.security.permissions.PermissionEntity;
 import com.j0k3r_dev.cic_eva_peron.security.permissions.PermissionRepository;
 import com.j0k3r_dev.cic_eva_peron.security.roles.RoleEntity;
 import com.j0k3r_dev.cic_eva_peron.security.roles.RoleRepository;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,7 +29,7 @@ public class UserService {
 
     @Transactional
     public UserResponse registryUser(UserRequest userRequest){
-        UserEntity user = UserMapper.INSTANCE.userReqiestToUserEntity(userRequest);
+        Employee user = UserMapper.INSTANCE.userRequestToEmployee(userRequest);
         Optional<RoleEntity> role = roleRepository.findByName("USER");
         if(role.isEmpty()){
             throw new RuntimeException("Role not found");
@@ -42,6 +40,5 @@ public class UserService {
         userRepository.save(user);
         return UserMapper.INSTANCE.userEntityToUserResponse(user);
     }
-
 
 }

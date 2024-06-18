@@ -1,18 +1,19 @@
 package com.j0k3r_dev.cic_eva_peron.registry;
 
 import com.j0k3r_dev.cic_eva_peron.users.UserEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "registries")
 public class RegistryEntity {
@@ -25,5 +26,8 @@ public class RegistryEntity {
 
     @ManyToOne
     private UserEntity userEntity;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime createdAt;
 
 }

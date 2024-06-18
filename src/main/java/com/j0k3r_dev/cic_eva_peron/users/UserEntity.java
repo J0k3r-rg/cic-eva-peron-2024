@@ -1,12 +1,12 @@
 package com.j0k3r_dev.cic_eva_peron.users;
 
-import com.j0k3r_dev.cic_eva_peron.security.permissions.PermissionEntity;
 import com.j0k3r_dev.cic_eva_peron.security.roles.RoleEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,15 +19,17 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @Entity
-@Table(name = "users")
-public class UserEntity implements UserDetails {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public abstract class UserEntity implements UserDetails {
 
     @Id
     @UuidGenerator
     @Column(length = 40)
     private String id;
+
+    private Integer codeNumber;
 
     @Column(unique = true, length = 45)
     private String username;
@@ -41,14 +43,19 @@ public class UserEntity implements UserDetails {
     @Column(unique = true)
     private String dni;
 
+    private String names;
+
+    private String lastNames;
+
     @Column(unique = true)
     private String urlImage;
-
-    private Boolean enable = false;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private RoleEntity role;
+
+    @Builder.Default
+    private Boolean enable = false;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

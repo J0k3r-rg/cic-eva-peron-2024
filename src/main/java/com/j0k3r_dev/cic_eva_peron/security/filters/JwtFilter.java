@@ -29,11 +29,10 @@ public class JwtFilter extends OncePerRequestFilter{
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, JWTDecodeException {
 
         if(getAuthorization(request) != null && getAuthorization(request).startsWith("Bearer ")){
-            System.out.println("Ejecutando filtro antes de todas las validaciones de spting security");
             String token = getTokenAuthorization(getAuthorization(request));
             String subject = null;
             try{
-                subject = jwtService.validateAndGetSubject(token);
+                subject = jwtService.validateTokenLogin(token);
             } catch (JWTDecodeException e){
                 throw new JWTDecodeException("El token es invalido");
             }

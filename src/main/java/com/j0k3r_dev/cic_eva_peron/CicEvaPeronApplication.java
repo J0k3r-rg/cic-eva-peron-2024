@@ -1,9 +1,13 @@
 package com.j0k3r_dev.cic_eva_peron;
 
+import com.j0k3r_dev.cic_eva_peron.normalization.TypeOfIdentification;
+import com.j0k3r_dev.cic_eva_peron.normalization.TypeOfIdentificationRepository;
 import com.j0k3r_dev.cic_eva_peron.security.permissions.PermissionEntity;
 import com.j0k3r_dev.cic_eva_peron.security.permissions.PermissionRepository;
 import com.j0k3r_dev.cic_eva_peron.security.roles.RoleEntity;
 import com.j0k3r_dev.cic_eva_peron.security.roles.RoleRepository;
+import com.j0k3r_dev.cic_eva_peron.users.Employee;
+import com.j0k3r_dev.cic_eva_peron.users.EmployeeRepository;
 import com.j0k3r_dev.cic_eva_peron.users.UserEntity;
 import com.j0k3r_dev.cic_eva_peron.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +28,7 @@ public class CicEvaPeronApplication {
 	}
 
 	@Autowired
-	private UserRepository userRepository;
+	private EmployeeRepository employeeRepository;
 
 	@Autowired
 	private RoleRepository roleRepository;
@@ -34,6 +38,9 @@ public class CicEvaPeronApplication {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private TypeOfIdentificationRepository typeOfIdentificationRepository;
 
 	@Bean
 	CommandLineRunner init(){
@@ -47,6 +54,18 @@ public class CicEvaPeronApplication {
 											.build()
 							)
 			).toList();
+
+			Stream.of(
+					"DNI", "PASAPORTE", "CARNET DE EXTRANJERIA"
+			).forEach(
+					type ->
+							typeOfIdentificationRepository.save(
+									TypeOfIdentification.builder()
+											.name(type)
+											.build()
+							)
+			);
+
 			roleRepository.save(
 					RoleEntity.builder()
 							.name("USER")
@@ -56,7 +75,8 @@ public class CicEvaPeronApplication {
 
 			Stream.of(
 					"GET_ROLE","CREATE_ROLE",
-					"CREATE_PERMISSION","GET_PERMISSION"
+					"CREATE_PERMISSION","GET_PERMISSION",
+					"CREATE_ITEM","CREATE_MEMBER","CREATE_REPORT"
 			).forEach(
 					authority ->
 							permissionRepository.save(
@@ -76,8 +96,8 @@ public class CicEvaPeronApplication {
 							.build()
 			);
 
-			userRepository.save(
-					UserEntity.builder()
+			employeeRepository.save(
+					Employee.builder()
 							.username("j0k3r.rg")
 							.password(passwordEncoder.encode("123456"))
 							.role(role)

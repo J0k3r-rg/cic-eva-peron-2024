@@ -18,8 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import javax.annotation.processing.Filer;
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -45,7 +43,8 @@ public class SecurityConfigs {
                                         .requestMatchers(
                                                 HttpMethod.POST,
                                                 "/api/login",
-                                                "/api/registry"
+                                                "/api/registry",
+                                                "/api/logout"
                                         ).permitAll()
                                         .anyRequest().authenticated()
                 )

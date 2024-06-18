@@ -11,7 +11,7 @@ public interface UserMapper {
 
     public static UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    UserEntity userReqiestToUserEntity(UserRequest userRequest);
+    Employee userRequestToEmployee(UserRequest userRequest);
 
     UserResponse userEntityToUserResponse(UserEntity userEntity);
 
