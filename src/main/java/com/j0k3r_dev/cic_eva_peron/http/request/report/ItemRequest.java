@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ItemRequest {
 
-    @NotBlank
     private String id;
 
     @NotBlank

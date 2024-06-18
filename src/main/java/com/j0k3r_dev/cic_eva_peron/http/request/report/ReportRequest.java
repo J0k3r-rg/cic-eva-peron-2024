@@ -27,10 +27,6 @@ public class ReportRequest {
     private List<String> members;
 
     @NotEmpty
-//    @Length.List({
-//            @Length(min = 1, message = "items must have at least 1 element"),
-//            @Length(max = 10, message = "items must have at most 10 elements")
-//    })
     private List<String> items;
 
 }

@@ -1,5 +1,6 @@
-package com.j0k3r_dev.cic_eva_peron.users;
+package com.j0k3r_dev.cic_eva_peron.users.titular;
 
+import com.j0k3r_dev.cic_eva_peron.users.UserEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.*;
@@ -19,6 +20,8 @@ public class Titular extends UserEntity {
     private String identificationNumber;
 
     private LocalDate birthDate;
+
+    private String birthplace;
 
     private String nationality;
 

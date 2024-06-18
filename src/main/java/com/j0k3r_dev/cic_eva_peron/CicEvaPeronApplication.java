@@ -76,7 +76,8 @@ public class CicEvaPeronApplication {
 			Stream.of(
 					"GET_ROLE","CREATE_ROLE",
 					"CREATE_PERMISSION","GET_PERMISSION",
-					"CREATE_ITEM","CREATE_MEMBER","CREATE_REPORT"
+					"CREATE_ITEM","CREATE_MEMBER","CREATE_REPORT",
+					"REGISTRY_USER"
 			).forEach(
 					authority ->
 							permissionRepository.save(

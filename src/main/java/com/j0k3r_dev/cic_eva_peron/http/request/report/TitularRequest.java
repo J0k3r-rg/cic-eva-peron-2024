@@ -10,9 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MemberRequest {
-
-    private String id;
+public class TitularRequest {
 
     @NotBlank
     private String names;
@@ -21,15 +19,32 @@ public class MemberRequest {
     private String lastNames;
 
     @NotBlank
-    private String typeOfIdentificationString;
+    private String typeOfIdentification;
 
     @NotBlank
     private String identificationNumber;
 
     @NotBlank
-    private String  birthdateString;
+    private String birthDateString;
 
     @NotBlank
-    private String relationship;
+    private String birthplace;
+
+    @NotBlank
+    private String nationality;
+
+    private String phone;
+
+    @NotBlank
+    private String address;
+
+    @NotBlank
+    private String neighborhood;
+
+    @NotBlank
+    private String city;
+
+    @NotBlank
+    private String postalCode;
 
 }

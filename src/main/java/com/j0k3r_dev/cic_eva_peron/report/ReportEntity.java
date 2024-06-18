@@ -3,7 +3,7 @@ package com.j0k3r_dev.cic_eva_peron.report;
 import com.j0k3r_dev.cic_eva_peron.report.item.Item;
 import com.j0k3r_dev.cic_eva_peron.report.member.Member;
 import com.j0k3r_dev.cic_eva_peron.users.Employee;
-import com.j0k3r_dev.cic_eva_peron.users.Titular;
+import com.j0k3r_dev.cic_eva_peron.users.titular.Titular;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
