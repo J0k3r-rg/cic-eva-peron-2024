@@ -42,71 +42,76 @@ public class CicEvaPeronApplication {
 	@Autowired
 	private TypeOfIdentificationRepository typeOfIdentificationRepository;
 
-	@Bean
-	CommandLineRunner init(){
-		return args -> {
-			List<PermissionEntity> permissionUser = Stream.of(
-					"PROFILE_USER","UPDATE_PROFILE").map(
-					authority ->
-							permissionRepository.save(
-									PermissionEntity.builder()
-											.name(authority)
-											.build()
-							)
-			).toList();
-
-			Stream.of(
-					"DNI", "PASAPORTE", "CARNET DE EXTRANJERIA"
-			).forEach(
-					type ->
-							typeOfIdentificationRepository.save(
-									TypeOfIdentification.builder()
-											.name(type)
-											.build()
-							)
-			);
-
-			roleRepository.save(
-					RoleEntity.builder()
-							.name("USER")
-							.permissions(permissionUser)
-							.build()
-			);
-
-			Stream.of(
-					"GET_ROLE","CREATE_ROLE",
-					"CREATE_PERMISSION","GET_PERMISSION",
-					"CREATE_ITEM","CREATE_MEMBER","CREATE_REPORT",
-					"REGISTRY_USER"
-			).forEach(
-					authority ->
-							permissionRepository.save(
-									PermissionEntity.builder()
-											.name(authority)
-											.build()
-							)
-			);
-
-
-			RoleEntity role = roleRepository.save(
-					RoleEntity.builder()
-							.name("ROOT")
-							.permissions(
-									permissionRepository.findAll()
-							)
-							.build()
-			);
-
-			employeeRepository.save(
-					Employee.builder()
-							.username("j0k3r.rg")
-							.password(passwordEncoder.encode("123456"))
-							.role(role)
-							.enable(true)
-							.build()
-			);
-		};
-
-	}
+//	@Bean
+//	CommandLineRunner init(){
+//		return args -> {
+//			List<PermissionEntity> permissionUser = Stream.of(
+//					"PROFILE_USER","UPDATE_PROFILE").map(
+//					authority ->
+//							permissionRepository.save(
+//									PermissionEntity.builder()
+//											.name(authority)
+//											.build()
+//							)
+//			).toList();
+//
+//			Stream.of(
+//					"DNI", "PASAPORTE", "CARNET DE EXTRANJERIA"
+//			).forEach(
+//					type ->
+//							typeOfIdentificationRepository.save(
+//									TypeOfIdentification.builder()
+//											.name(type)
+//											.build()
+//							)
+//			);
+//
+//			roleRepository.save(
+//					RoleEntity.builder()
+//							.name("USER")
+//							.permissions(permissionUser)
+//							.build()
+//			);
+//
+//			roleRepository.save(
+//					RoleEntity.builder()
+//							.name("TITULAR")
+//							.build()
+//			);
+//
+//			Stream.of(
+//					"GET_ROLE","CREATE_ROLE",
+//					"CREATE_PERMISSION","GET_PERMISSION",
+//					"CREATE_ITEM","CREATE_MEMBER","CREATE_REPORT",
+//					"CREATE_TITULAR","UPDATE_TITULAR"
+//			).forEach(
+//					authority ->
+//							permissionRepository.save(
+//									PermissionEntity.builder()
+//											.name(authority)
+//											.build()
+//							)
+//			);
+//
+//			RoleEntity role = roleRepository.save(
+//					RoleEntity.builder()
+//							.name("ROOT")
+//							.permissions(
+//									permissionRepository.findAll()
+//							)
+//							.build()
+//			);
+//
+//			employeeRepository.save(
+//					Employee.builder()
+//							.username("j0k3r")
+//							.password(passwordEncoder.encode("123456"))
+//							.role(role)
+//							.enable(true)
+//							.build()
+//			);
+//		};
+//
+//	}
 
 }

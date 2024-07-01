@@ -7,6 +7,7 @@ import com.j0k3r_dev.cic_eva_peron.security.JwtService;
 import com.j0k3r_dev.cic_eva_peron.security.MultiReadHttpServletRequest;
 import com.j0k3r_dev.cic_eva_peron.security.filters.description.ObtainDescription;
 import com.j0k3r_dev.cic_eva_peron.users.UserEntity;
+import com.j0k3r_dev.cic_eva_peron.users.UserException;
 import com.j0k3r_dev.cic_eva_peron.users.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -44,20 +45,29 @@ public class RegistryFilter extends OncePerRequestFilter {
             return;
         }
         String token = jwtService.getTokenAuthorization(authorization);
-        String subject = jwtService.validateTokenLogin(token);
-        UserEntity userEntity = userRepository.findByUsername(subject).orElse(null);
-        MultiReadHttpServletRequest multiReadRequest = new MultiReadHttpServletRequest(request);
-        String bodyCopy = IOUtils.toString(multiReadRequest.getReader());
-        CustomHttpServletResponseWrapper responseWrapper = new CustomHttpServletResponseWrapper(response);
-        filterChain.doFilter(multiReadRequest,responseWrapper);
-        if(responseWrapper.getStatus() == HttpServletResponse.SC_OK) {
+        String id = request.getHeader("id");
+        String subject = null;
+        try {
+            subject = jwtService.validateTokenLogin(token,id);
+            System.out.println("subject: " + subject);
+            System.out.println("id: " + id);
             RegistryEntity.RegistryEntityBuilder registryBuilder = RegistryEntity.builder()
-                    .userEntity(userEntity).createdAt(LocalDateTime.now());
+                    .createdAt(LocalDateTime.now());
             obtainDescriptionList.get(0).process(request, registryBuilder);
             if ((registryBuilder.build().getDescription()!= null)){
-                registryBuilder.description(registryBuilder.build().getDescription().concat(" - ").concat(bodyCopy));
-                registryRepository.save(registryBuilder.build());
+                UserEntity userEntity = userRepository.findByUsername(subject).orElse(null);
+                MultiReadHttpServletRequest multiReadRequest = new MultiReadHttpServletRequest(request);
+                String bodyCopy = IOUtils.toString(multiReadRequest.getReader());
+                CustomHttpServletResponseWrapper responseWrapper = new CustomHttpServletResponseWrapper(response);
+                filterChain.doFilter(multiReadRequest,responseWrapper);
+                if(responseWrapper.getStatus() == HttpServletResponse.SC_OK) {
+                    registryBuilder.userEntity(userEntity);
+                    registryBuilder.description(registryBuilder.build().getDescription().concat(" - ").concat(bodyCopy));
+                    registryRepository.save(registryBuilder.build());
+                }
             }
+            filterChain.doFilter(request,response);
+        } catch (UserException e) {
         }
     }
 

@@ -29,7 +29,9 @@ public abstract class UserEntity implements UserDetails {
     @Column(length = 40)
     private String id;
 
-    private Integer codeNumber;
+    private Integer codeNumberActualization;
+
+    private Integer codeNumberLogin;
 
     @Column(unique = true, length = 45)
     private String username;

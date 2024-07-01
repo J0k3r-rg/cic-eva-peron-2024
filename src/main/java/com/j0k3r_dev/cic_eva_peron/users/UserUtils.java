@@ -14,20 +14,37 @@ public class UserUtils {
     private UserRepository userRepository;
 
     @Transactional
-    public Integer generateCodeNumber(String username) throws UserException {
+    public Integer generateCodeNumberLogin(String username) throws UserException {
         Optional<UserEntity> userOptional = userRepository.findByUsername(username);
         if (userOptional.isEmpty())
             throw new UserException("User not found",492);
         Integer codeNumber = new Random().nextInt(100000000,999999999);
-        userOptional.get().setCodeNumber(codeNumber);
-        userRepository.save(userOptional.get());
+        userOptional.get().setCodeNumberLogin(codeNumber);
         return codeNumber;
     }
 
-    public Integer obtainCodeNumber(String id) throws UserException{
+    public Integer obtainCodeNumberLogin(String id) throws UserException{
         Optional<UserEntity> userOptional = userRepository.findById(id);
         if (userOptional.isEmpty())
             throw new UserException("User not found",492);
-        return userOptional.get().getCodeNumber();
+        return userOptional.get().getCodeNumberLogin();
     }
+
+    @Transactional
+    public Integer generateCodeNumberActualization(String username) throws UserException {
+        Optional<UserEntity> userOptional = userRepository.findByUsername(username);
+        if (userOptional.isEmpty())
+            throw new UserException("User not found",492);
+        Integer codeNumber = new Random().nextInt(100000000,999999999);
+        userOptional.get().setCodeNumberActualization(codeNumber);
+        return codeNumber;
+    }
+
+    public Integer obtainCodeNumberActualization(String id) throws UserException {
+        Optional<UserEntity> userOptional = userRepository.findById(id);
+        if (userOptional.isEmpty())
+            throw new UserException("User not found",492);
+        return userOptional.get().getCodeNumberActualization();
+    }
+
 }

@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TitularRequest {
 
+    private String id;
+
     @NotBlank
     private String names;
 

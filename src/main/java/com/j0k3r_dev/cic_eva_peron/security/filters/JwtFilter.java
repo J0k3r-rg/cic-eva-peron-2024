@@ -2,6 +2,7 @@ package com.j0k3r_dev.cic_eva_peron.security.filters;
 
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.j0k3r_dev.cic_eva_peron.security.JwtService;
+import com.j0k3r_dev.cic_eva_peron.users.UserException;
 import com.j0k3r_dev.cic_eva_peron.users.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -30,10 +31,11 @@ public class JwtFilter extends OncePerRequestFilter{
 
         if(getAuthorization(request) != null && getAuthorization(request).startsWith("Bearer ")){
             String token = getTokenAuthorization(getAuthorization(request));
+            String id = request.getHeader("id");
             String subject = null;
             try{
-                subject = jwtService.validateTokenLogin(token);
-            } catch (JWTDecodeException e){
+                subject = jwtService.validateTokenLogin(token,id);
+            } catch (JWTDecodeException | UserException e){
                 throw new JWTDecodeException("El token es invalido");
             }
             if(subject!= null){

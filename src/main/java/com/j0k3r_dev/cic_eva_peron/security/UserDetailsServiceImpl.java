@@ -33,7 +33,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Optional<UserEntity> userOptional = userRepository.findById(id);
         if (userOptional.isEmpty())
             throw new UserException("User not found",492);
-        userOptional.get().setCodeNumber(null);
+        userOptional.get().setCodeNumberLogin(null);
+        userOptional.get().setCodeNumberActualization(null);
     }
 
     @Transactional
